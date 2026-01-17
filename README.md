@@ -11,5 +11,3 @@ This repo has simple projects from my AI Engineering book. They teach how to bui
 1. Install Ollama from ollama.com.
 2. Download a free model: Run `ollama pull phi3.5:mini` in your terminal.
 3. Follow each project's folder for steps.
-
-More projects coming soon!
