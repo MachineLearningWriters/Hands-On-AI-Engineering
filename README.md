@@ -66,6 +66,4 @@ MIT – free to use, modify, and share.
 
 Questions or suggestions → open an issue.
 
-Happy building!  
-Ikenna  
-Co-author of *Hands-On AI Engineering*
+Happy building! 
