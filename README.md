@@ -14,22 +14,37 @@ Each project teaches practical skills for building reliable AI systems using lar
 
 1. Install **Ollama** → https://ollama.com  
 2. Pull a strong local model (recommended):ollama pull phi3.5, (or try `tinyllama` if your computer is slower)
-3. Clone this repo: git clone https://github.com/flashyiyke/machine-learning-n-writers.gitcd machine-learning-n-writers
+3. Clone this repo: git clone https://github.com/FlashyIyke/Hands-On-AI-Engineering.git
+cd Hands-On-AI-Engineering
 4. Go to any project folder and follow its `README.md`
 
 ## Project List
 
-- **Project 1: Simple Book Companion Chat**  
+## Project List
 
-- **Project 2: Personal Knowledge Base Q&A (Basic Local RAG)**  
+- **Project 1** – Simple Book Companion Chat  
+  Basic local chatbot answering questions about the book  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/01-book-companion-chat)
 
-- **Project 3: Evaluated RAG with Offline Test Set**  
+- **Project 2** – Personal Knowledge Base Q&A (Basic Local RAG)  
+  Upload your own documents → ask questions → get grounded answers with sources  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/02-basic-rag)
 
-- **Project 4: Reliable Conversational Agent with Memory & Tools**  
+- **Project 3** – Evaluated RAG with Offline Test Set  
+  RAG system + offline evaluation (Golden Dataset, LLM-as-a-judge, regression testing)  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/03-evaluated-rag)
 
-- **Project 5: Personal Summarizer with Quality Dashboard**  
+- **Project 4** – Reliable Conversational Agent with Memory & Tools  
+  Chat with memory, calculator/time tools, strong guardrails  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/04-reliable-agent)
 
-- **Project 6: Chapter Compass – Chapter Explorer & Quiz Generator**
+- **Project 5** – Personal Summarizer with Quality Dashboard  
+  Upload document → generate styled summary → automatic quality scores → history dashboard  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/05-personal-summarizer)
+
+- **Project 6** – Chapter Compass – Chapter Explorer & Quiz Generator  
+  Upload one chapter → get outline, concept cards, 10-question self-test quiz + downloadable HTML study pack  
+  → [View folder](https://github.com/FlashyIyke/Hands-On-AI-Engineering/tree/main/projects/06-chapter-compass)
 
 ## Recommended Learning Path
 
