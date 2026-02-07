@@ -27,23 +27,23 @@ cd Hands-On-AI-Engineering
 
 - **Project 2** – Personal Knowledge Base Q&A (Basic Local RAG)  
   Upload your own documents → ask questions → get grounded answers with sources  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/02-personal-rag)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/01-first-project/projects/02-personal-rag
 
 - **Project 3** – Evaluated RAG with Offline Test Set  
   RAG system + offline evaluation (Golden Dataset, LLM-as-a-judge, regression testing)  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/03-evaluated-rag)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/01-first-project/projects/03-evaluated-rag/projects/03-evaluated-rag
 
 - **Project 4** – Reliable Conversational Agent with Memory & Tools  
   Chat with memory, calculator/time tools, strong guardrails  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/04-reliable-agent)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/projects/04-reliable-agent
 
 - **Project 5** – Personal Summarizer with Quality Dashboard  
   Upload document → generate styled summary → automatic quality scores → history dashboard  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/05-personal-summarizer)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/projects/05-personal-summarizer
 
 - **Project 6** – Chapter Compass – Chapter Explorer & Quiz Generator  
   Upload one chapter → get outline, concept cards, 10-question self-test quiz + downloadable HTML study pack  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/06-chapter-compass)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/projects/06-chapter-compass
 
 ## Recommended Learning Path
 
