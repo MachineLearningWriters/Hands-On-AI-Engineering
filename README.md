@@ -23,7 +23,7 @@ cd Hands-On-AI-Engineering
 
 - **Project 1** – Simple Book Companion Chat  
   Basic local chatbot answering questions about the book  
-  → [View folder](https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/01-first-project)
+  → [View folder] https://github.com/MachineLearningWriters/Hands-On-AI-Engineering/tree/main/projects/01-first-project
 
 - **Project 2** – Personal Knowledge Base Q&A (Basic Local RAG)  
   Upload your own documents → ask questions → get grounded answers with sources  
