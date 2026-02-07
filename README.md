@@ -20,34 +20,16 @@ Each project teaches practical skills for building reliable AI systems using lar
 ## Project List
 
 - **Project 1: Simple Book Companion Chat**  
-Basic local chatbot that answers questions about the book using Ollama + Gradio.  
-Key skills: prompt engineering, system prompts, basic UI.  
-[View folder → projects/01-book-companion-chat](projects/01-book-companion-chat)
 
 - **Project 2: Personal Knowledge Base Q&A (Basic Local RAG)**  
-Upload your own documents (PDF/text) → ask questions → get grounded answers with sources.  
-Key skills: document loading, chunking, embeddings, FAISS, retrieval, grounding.  
-[View folder → projects/02-basic-rag](projects/02-basic-rag)
 
 - **Project 3: Evaluated RAG with Offline Test Set**  
-RAG system + offline evaluation using Golden Dataset, LLM-as-a-judge, rubrics, regression testing.  
-Key skills: evaluation frameworks, faithfulness/relevance scoring, regression protection.  
-[View folder → projects/03-evaluated-rag](projects/03-evaluated-rag)
 
 - **Project 4: Reliable Conversational Agent with Memory & Tools**  
-Conversational agent with chat memory, simple tools (calculator, current time), guardrails.  
-Key skills: conversation memory, tool calling, structured output, safe failure modes.  
-[View folder → projects/04-reliable-agent](projects/04-reliable-agent)
 
 - **Project 5: Personal Summarizer with Quality Dashboard**  
-Upload one document → generate styled summary → automatic quality scoring → view history & stats.  
-Key skills: summarization prompting, faithfulness/completeness/conciseness evaluation, logging, monitoring dashboard.  
-[View folder → projects/05-personal-summarizer](projects/05-personal-summarizer)
 
-- **Project 6: [Title TBD – e.g. Advanced Monitored Multi-Tool Agent]**  
-[Description placeholder – will be updated when built]  
-Key skills: [placeholder]  
-[View folder → projects/06-[folder-name]](projects/06-[folder-name])
+- **Project 6: Chapter Compass – Chapter Explorer & Quiz Generator**
 
 ## Recommended Learning Path
 
