@@ -1,37 +1,24 @@
-# Project 2: Personal Knowledge Base Q&A (Basic Local RAG)
+# Project 2: Doc RAG – Document Q&A with Sources
 
 **What it does**  
-A 100% local, zero-cost question-answering system over your own documents (PDFs, text, Markdown).  
-Ask anything — answers are grounded in your files (no hallucinations when retrieval works well).
+Upload your own PDF or text files → ask any question → get accurate answers **grounded in your documents** + see exactly which parts (chunks) were used to generate the answer.
 
-**What you'll learn by following along**  
-- Loading & parsing PDFs/text files  
-- Chunking documents with overlap for better context  
-- Creating embeddings with sentence-transformers  
-- Storing vectors locally with FAISS (fast similarity search)  
-- Retrieval: finding relevant chunks for a question  
-- Generation: prompting Ollama to answer only using retrieved content  
-- Simple Gradio UI for chatting  
-- Displaying sources (so you see exactly what the AI used)
+This is the first real introduction to **RAG** (Retrieval-Augmented Generation) — the technique that makes AI answers reliable instead of guessing.
 
-**Requirements**  
+**Key skills you learn by following along**
+- Loading & parsing PDFs and text files  
+- Splitting documents into smart chunks (with overlap)  
+- Creating embeddings (text → numbers) using sentence-transformers  
+- Storing embeddings in a local vector store (FAISS)  
+- Retrieving relevant chunks for a question  
+- Prompting the LLM to answer only from retrieved content (no hallucinations)  
+- Showing sources so users can verify the answer
+
+**Requirements**
 - Python 3.10+  
 - Ollama with a model pulled (e.g. `ollama pull tinyllama` or `phi3.5`)  
-- Packages: `pip install sentence-transformers faiss-cpu pypdf gradio ollama`
+- `pip install -r requirements.txt`
 
-**How to run**  
-1. Put your PDFs/text files in the `documents/` folder  
-2. Run:python app.py
-3. Open http://127.0.0.1:7860 in your browser  
-4. Click "Load Documents" → ask questions!
-
-**Example questions**  
-- "What is the RAG Triad?"  
-- "Explain regression testing from the book"  
-- "What deployment pattern is best for beginners?"
-
-**Screenshots**  
-(Add screenshots later — see below)
-
-**License**  
-MIT — feel free to use/modify for your own projects.
+**How to run locally**
+1. Put one or more PDFs/text files in the `documents/` folder  
+2. Run:
