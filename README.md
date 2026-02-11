@@ -19,7 +19,6 @@ cd Hands-On-AI-Engineering
 4. Go to any project folder and follow its `README.md`
 
 ## Project List
-## Project List
 
 - **Project 1** – Simple Book Companion Chat  
   Basic local chatbot answering questions about the book  
