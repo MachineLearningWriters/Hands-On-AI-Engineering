@@ -1,25 +1,22 @@
 import gradio as gr
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
 from pypdf import PdfReader
 import os
 import ollama
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
 import pandas as pd
 
-# ====================
-# CONFIGURATION
-# ====================
-EMBEDDING_MODEL = 'all-MiniLM-L6-v2'
+# === SETTINGS ===
 DOCUMENTS_FOLDER = "documents"
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 100
 TOP_K = 3
+MODEL = 'tinyllama'  # or 'phi3.5'
+TEST_SET = "test_set.csv"
 
-# Load embedding model once
-embedder = SentenceTransformer(EMBEDDING_MODEL)
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Global vector store
 index = None
 chunks = []
 metadata = []
@@ -34,21 +31,12 @@ def load_documents():
         text = ""
 
         if filename.endswith(".pdf"):
-            try:
-                reader = PdfReader(path)
-                for page in reader.pages:
-                    text += page.extract_text() or ""
-            except Exception as e:
-                print(f"PDF error {filename}: {e}")
-                continue
-
+            reader = PdfReader(path)
+            for page in reader.pages:
+                text += page.extract_text() or ""
         elif filename.endswith((".txt", ".md")):
-            try:
-                with open(path, "r", encoding="utf-8") as f:
-                    text = f.read()
-            except Exception as e:
-                print(f"Text error {filename}: {e}")
-                continue
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read()
 
         if not text.strip():
             continue
@@ -68,7 +56,7 @@ def load_documents():
     index = faiss.IndexFlatL2(dimension)
     index.add(embeddings)
 
-    return f"Loaded {len(chunks)} chunks from {len(os.listdir(DOCUMENTS_FOLDER))} files."
+    return f"Loaded {len(chunks)} chunks."
 
 def search(question):
     if index is None:
@@ -93,35 +81,26 @@ def search(question):
 def answer(question):
     context, sources = search(question)
 
-    prompt = f"""You are a helpful assistant answering questions strictly based on the AI Engineering book.
-Use ONLY the provided context. Be concise, accurate.
-If not in context, say: "I don't have enough information from the documents."
-
-Always cite source file and chunk when possible.
+    prompt = f"""Use ONLY the context below to answer. Be concise.
+If not in context, say exactly: "I don't have enough information from the documents."
 
 Context:
 {context}
 
 Question: {question}
 
-Answer (short, bullet points if helpful):"""
+Answer:"""
 
-    try:
-        response = ollama.generate(model='tinyllama', prompt=prompt)
-        return response['response'].strip(), sources
-    except Exception as e:
-        return f"Error: {str(e)}", sources
+    response = ollama.generate(model=MODEL, prompt=prompt)
+    return response['response'].strip(), sources
 
-# ====================
-# EVALUATION FUNCTIONS
-# ====================
-def judge_answer(question, answer_text, expected_behavior, model='tinyllama'):
+def judge_answer(question, answer, expected):
     prompt = f"""You are an impartial judge.
 Question: {question}
-AI Answer: {answer_text}
-Expected: {expected_behavior}
+AI Answer: {answer}
+Expected Behavior: {expected}
 
-Score (1–5):
+Score 1-5:
 1. Faithfulness (no hallucination)
 2. Relevance (direct answer)
 3. Abstention (says "I don't know" if no info)
@@ -129,18 +108,14 @@ Score (1–5):
 
 Output only:
 Score: X/5
-Reason: [1-2 sentences]
-"""
+Reason: [short]"""
 
-    try:
-        response = ollama.generate(model=model, prompt=prompt)
-        return response['response'].strip()
-    except Exception as e:
-        return f"Judge error: {str(e)}"
+    response = ollama.generate(model=MODEL, prompt=prompt)
+    return response['response'].strip()
 
 def run_evaluation():
     try:
-        test_df = pd.read_csv("test_set.csv")
+        test_df = pd.read_csv(TEST_SET)
     except FileNotFoundError:
         return None, "test_set.csv not found."
 
@@ -158,18 +133,15 @@ def run_evaluation():
         })
 
     results_df = pd.DataFrame(results)
-    return results_df, "Evaluation complete!"
+    return results_df.to_markdown(index=False), "Evaluation complete!"
 
-# ====================
-# GRADIO UI
-# ====================
 with gr.Blocks() as demo:
-    gr.Markdown("# AI Engineering Book Companion + Evaluation")
-    gr.Markdown("Chat: Ask questions. Evaluation: Run test set scores.")
+    gr.Markdown("# Project 3: RAG Evaluated – Tested & Scored RAG")
+    gr.Markdown("Same as Project 2 + automatic evaluation on fixed test questions.")
 
     with gr.Tab("Chat"):
         load_btn = gr.Button("Load Documents")
-        status = gr.Textbox(label="Status", interactive=False)
+        status = gr.Textbox(label="Status")
 
         question = gr.Textbox(label="Your Question")
         ask_btn = gr.Button("Ask")
@@ -181,15 +153,15 @@ with gr.Blocks() as demo:
         ask_btn.click(answer, inputs=question, outputs=[output, sources_box])
 
     with gr.Tab("Evaluation"):
-        gr.Markdown("Run offline evaluation on test_set.csv")
+        gr.Markdown("Run offline test on test_set.csv")
         eval_btn = gr.Button("Run Evaluation")
-        eval_output = gr.Dataframe(label="Results")
-        eval_status = gr.Textbox(label="Status", interactive=False)
+        eval_output = gr.Markdown(label="Evaluation Results")
+        eval_status = gr.Textbox(label="Status")
 
         def run_eval_ui():
-            df, msg = run_evaluation()
-            return df, msg
+            df_md, msg = run_evaluation()
+            return df_md, msg
 
         eval_btn.click(run_eval_ui, outputs=[eval_output, eval_status])
 
-demo.launch()
+demo.launch(server_name="127.0.0.1", server_port=7862)
