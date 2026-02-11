@@ -1,52 +1,28 @@
-# Project 1: Simple AI Engineering Book Companion Chat
-# Proof of Concept for the "Machine Learning n Writers" / AI Engineering book
-# Runs 100% locally with Ollama + tinyllama
-# Created by Machine Learning Writers
-# No memory, no extra features — just reliable book-topic answers
-
 import gradio as gr
 import ollama
 
-def chat_with_ai(message, history):
+def answer_question(message, history):
+    # Simple system prompt to focus on the book
+    system_prompt = "You are a helpful assistant that only answers questions about AI Engineering topics from the book. If the question is not related, say 'I only answer questions about the AI Engineering book.' Keep answers short and clear."
+
+    # Send to Ollama
     response = ollama.chat(
-        model='tinyllama',
+        model='tinyllama',  # change to 'phi3.5' if you want better answers
         messages=[
-            {
-                'role': 'system',
-                'content': """You are "AI Engineering Companion", a friendly helper for the book "Machine Learning n Writers" / "Practical AI Engineering" by Ikenna.
-
-Your only job is to help readers understand and apply the book's main topics:
-- Prompt engineering
-- Retrieval-Augmented Generation (RAG)
-- Evaluation, testing, and reliability
-- Guardrails and safe failure modes
-- Deployment and monitoring of local AI systems
-- Offline / zero-cost tools (Ollama, Gradio, etc.)
-
-Always:
-- Answer in simple, beginner-friendly language
-- Give short examples or small experiments when possible
-- Be encouraging: "Great question! This is exactly what Chapter 10 teaches..."
-- If the question has nothing to do with the book or AI engineering, politely say:  
-  "I'm focused on helping with the AI Engineering book topics. What part of prompting, RAG, evaluation, reliability or deployment would you like to talk about?"
-
-Stay excited about learning AI engineering!"""
-            },
+            {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': message}
         ]
     )
     return response['message']['content']
 
 demo = gr.ChatInterface(
-    fn=chat_with_ai,
-    title="AI Engineering Companion – For the Machine Learning n Writers Book",
-    description="Ask anything about the book's topics: prompting, RAG, evaluation, reliability, deployment, monitoring, and local tools. Each question is independent.",
+    fn=answer_question,
+    title="Project 1: Book Chat – Simple LLM Q&A",
+    description="Ask anything about AI Engineering book topics!",
     examples=[
-        "What is the most important thing in prompt engineering?",
-        "How do I build a simple RAG system?",
-        "Why is evaluation so hard for language models?",
-        "What does Chapter 11 say about monitoring?",
-        "My app is slow — what can I try?"
+        "What is the RAG Triad?",
+        "Explain LoRA fine-tuning",
+        "What is my favorite color?"
     ]
 )
 
