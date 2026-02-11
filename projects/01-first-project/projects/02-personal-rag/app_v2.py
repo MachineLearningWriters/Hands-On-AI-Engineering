@@ -1,20 +1,20 @@
 import gradio as gr
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
 from pypdf import PdfReader
 import os
 import ollama
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
 
-# === CONFIG ===
-MODEL_NAME = 'all-MiniLM-L6-v2'  # Fast, good embedding model
-DOCUMENTS_FOLDER = "documents"   # Your files go here
-CHUNK_SIZE = 500                 # Characters per chunk
-CHUNK_OVERLAP = 100              # Overlap for context
-TOP_K = 3                        # Retrieve top 3 chunks
+# === SETTINGS ===
+DOCUMENTS_FOLDER = "documents"
+CHUNK_SIZE = 500
+CHUNK_OVERLAP = 100
+TOP_K = 3
+MODEL = 'tinyllama'  # change to 'phi3.5' if you want better answers
 
-# Load embedding model (runs locally)
-embedder = SentenceTransformer(MODEL_NAME)
+# Load embedding model
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Global variables for vector store
 index = None
@@ -31,24 +31,33 @@ def load_documents():
         text = ""
 
         if filename.endswith(".pdf"):
-            reader = PdfReader(path)
-            for page in reader.pages:
-                text += page.extract_text() or ""
+            try:
+                reader = PdfReader(path)
+                for page in reader.pages:
+                    text += page.extract_text() or ""
+            except Exception as e:
+                print(f"PDF error {filename}: {e}")
+                continue
+
         elif filename.endswith((".txt", ".md")):
-            with open(path, "r", encoding="utf-8") as f:
-                text = f.read()
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    text = f.read()
+            except Exception as e:
+                print(f"Text error {filename}: {e}")
+                continue
 
         if not text.strip():
             continue
 
-        # Simple chunking with overlap
+        # Chunk text
         for i in range(0, len(text), CHUNK_SIZE - CHUNK_OVERLAP):
             chunk = text[i:i + CHUNK_SIZE]
             chunks.append(chunk)
             metadata.append({"file": filename, "start": i, "chunk_text": chunk})
 
     if not chunks:
-        return "No documents loaded or text extracted."
+        return "No documents loaded."
 
     # Create embeddings
     embeddings = embedder.encode(chunks, show_progress_bar=True)
@@ -63,12 +72,9 @@ def load_documents():
 
 def search(question):
     if index is None:
-        return "Please load documents first.", ""
+        return "", ""
 
-    # Embed question
     q_embedding = embedder.encode([question])[0].astype('float32')
-
-    # Search top K
     distances, indices = index.search(np.array([q_embedding]), TOP_K)
 
     retrieved_chunks = []
@@ -79,52 +85,45 @@ def search(question):
             continue
         chunk_info = metadata[idx]
         retrieved_chunks.append(chunk_info["chunk_text"])
-        retrieved_display.append(f"**From {chunk_info['file']}** (chunk starting at {chunk_info['start']}):\n{chunk_info['chunk_text'][:300]}...")
+        display_text = f"**From {chunk_info['file']}** (chunk {chunk_info['start']}):\n{chunk_info['chunk_text'][:300]}..."
+        retrieved_display.append(display_text)
 
     return "\n\n".join(retrieved_chunks), "\n\n---\n\n".join(retrieved_display)
 
 def answer(question):
     context, sources = search(question)
 
-    # Stronger system prompt: forces concise answers + citations
-    prompt = f"""You are a helpful assistant answering questions about the AI Engineering book.
-Use ONLY the provided context to answer. Be concise, clear, and accurate.
+    prompt = f"""You are a helpful assistant answering questions based ONLY on the provided context from documents.
+Use ONLY the context below. Be concise and accurate.
 If the information is not in the context, say exactly: "I don't have enough information from the documents."
-
-Always cite the source file and relevant part when possible.
 
 Context:
 {context}
 
 Question: {question}
 
-Answer (keep short, use bullet points if helpful):"""
+Answer (short, cite source file/chunk when possible):"""
 
     try:
-        response = ollama.generate(
-            model='tinyllama',  # change to 'phi3.5' if you prefer better quality
-            prompt=prompt
-        )
-        full_answer = response['response'].strip()
-        return full_answer, sources
+        response = ollama.generate(model=MODEL, prompt=prompt)
+        return response['response'].strip(), sources
     except Exception as e:
-        return f"Error generating answer: {str(e)}", sources
+        return f"Error: {str(e)}", sources
 
-# Gradio interface
 with gr.Blocks() as demo:
-    gr.Markdown("# Personal Knowledge Base Q&A (Local RAG)")
-    gr.Markdown("Drop PDFs/text files in the 'documents' folder, then click Load.")
+    gr.Markdown("# Project 2: Doc RAG – Document Q&A with Sources")
+    gr.Markdown("Upload your documents → ask questions → get answers with exact sources shown.")
 
-    load_btn = gr.Button("Load Documents")
+    load_btn = gr.Button("Load Documents from 'documents' folder")
     status = gr.Textbox(label="Status", interactive=False)
 
     question = gr.Textbox(label="Your Question")
     ask_btn = gr.Button("Ask")
 
     output = gr.Textbox(label="Answer", lines=8)
-    sources_box = gr.Markdown(label="Sources (what the AI actually used)")
+    sources_box = gr.Markdown(label="Sources Used")
 
     load_btn.click(load_documents, outputs=status)
     ask_btn.click(answer, inputs=question, outputs=[output, sources_box])
 
-demo.launch()
+demo.launch(server_name="127.0.0.1", server_port=7861)
