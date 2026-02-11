@@ -21,4 +21,18 @@ This is the first real introduction to **RAG** (Retrieval-Augmented Generation) 
 
 **How to run locally**
 1. Put one or more PDFs/text files in the `documents/` folder  
-2. Run:
+2. Run:python app.py
+3. Open http://127.0.0.1:7860 in your browser  
+4. Click **Load Documents** → wait for confirmation  
+5. Ask questions about your uploaded files → see answer + sources
+
+**Example questions**
+- "What is the RAG Triad?" (if your file has Chapter 10)  
+- "Explain regression testing"  
+- "What is my favorite color?" (should say "I don't have enough information")
+
+**Live demo**  
+(Coming soon — hosted on Hugging Face Spaces)
+
+**License**  
+MIT — free to use/modify.
